@@ -1,16 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import express from 'express'
 import request from 'supertest'
-
-vi.mock('../src/utils/appInfo.js', () => ({
-  getPackageInfo: vi.fn(),
-  getRuntimeInfo: vi.fn(),
-}))
-
 import { getPackageInfo, getRuntimeInfo } from '../src/utils/appInfo.js'
 import router from '../src/routes/auto/info.route.js'
 
-function makeApp() {
+vi.mock('../src/utils/appInfo.js', () => ({
+  getPackageInfo: vi.fn(),
+  getRuntimeInfo: vi.fn()
+}))
+
+function makeApp () {
   const app = express()
   app.use('/', router)
   return app
@@ -32,7 +31,7 @@ describe('info route (import direct)', () => {
       name: 'my-app',
       version: '1.2.3',
       node: 'v20.0.0',
-      uptime: 42,
+      uptime: 42
     })
   })
 
