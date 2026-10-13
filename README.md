@@ -15,7 +15,7 @@ It demonstrates a realistic workflow: **PLAN (Jira) → CODE (Git/VS Code) → B
 ## Quickstart
 
 ```bash
-npm ci
+npm ci              # Node.js >=20.19.0 (CI uses Node 20)
 npm run dev          # http://localhost:3000
 npm test -- --coverage
 ```
@@ -41,16 +41,19 @@ Routes are **auto-mounted** from `src/routes/auto/*.route.js` so each student ca
 - **Integration tests** (Supertest) target HTTP endpoints in `test/*.test.js`.
 - **Unit tests** target internal logic in `test/unit/*.test.js`.
 
-Coverage thresholds (Lines/Functions/Statements ≥ 80%, Branches ≥ 70%) are set in `package.json`.  
-If coverage drops below thresholds, CI fails and blocks the merge (quality gate).
+Coverage thresholds are enforced by `vitest.config.js`: lines, functions and statements ≥80%, branches ≥70%, for every source file and for the aggregate. All `src/**/*.js` files are included, including the server entrypoint.
+
+`npm run test:coverage` generates HTML, JSON, LCOV and console reports. Coverage below a threshold exits with a non-zero status and fails CI. Preventing merges with a failed check also requires a repository branch-protection rule configured by the owner.
+
+See [TESTING.md](TESTING.md) for the Step 4 test matrix, boundary cases and reproduction commands.
 
 ---
 
 ## Branch & Commit Convention (Jira-friendly)
 
-- Branch: `feature/<ISSUE-KEY>-<short-desc>` → e.g., `feature/SHMS-12-info-endpoint`
-- Commit: `feat(<ISSUE-KEY>): <what>` → e.g., `feat(SHMS-12): implement /info endpoint`
-- PR title: `<ISSUE-KEY> | <title>` → e.g., `SHMS-12 | Add /info endpoint`
+- Branch: `feature/<ISSUE-KEY>-<short-desc>` → e.g., `feature/DEVOPS-2-info-endpoint`
+- Commit: `feat(<ISSUE-KEY>): <what>` → e.g., `feat(DEVOPS-2): implement /info endpoint`
+- PR title: `<ISSUE-KEY> | <title>` → e.g., `DEVOPS-2 | Add /info endpoint`
 
 If you install **GitHub for Jira**, issues will link automatically when the key appears in branch/commit/PR.
 
@@ -65,11 +68,7 @@ A workflow is included at `.github/workflows/ci.yml` that runs on pushes and PRs
 - `npm test -- --coverage`
 - Upload `coverage/` as an artifact
 
-> Badge (enable after first run):
->
-> ```md
-> ![CI](https://github.com/<org>/<repo>/actions/workflows/ci.yml/badge.svg)
-> ```
+![CI](https://github.com/leochen260/LAB-4-Software-Ing-nieur/actions/workflows/ci.yml/badge.svg)
 
 ---
 
