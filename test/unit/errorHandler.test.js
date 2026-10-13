@@ -15,6 +15,12 @@ function makeRes () {
 }
 
 describe('errorHandler', () => {
+  it.each([null, undefined])('handles a missing error %s', error => {
+    const res = makeRes()
+    errorHandler(error, {}, res, () => {})
+    expect(res.statusCode).toBe(500)
+    expect(res.body).toEqual({ error: true, message: 'Internal Server Error' })
+  })
   it('defaults to 500 with generic message', () => {
     const res = makeRes()
     errorHandler({}, {}, res, () => {})

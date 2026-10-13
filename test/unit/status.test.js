@@ -6,6 +6,20 @@ import { describe, it, expect } from 'vitest'
 import { formatStatus } from '../../src/utils/status.js'
 
 describe('formatStatus', () => {
+  it.each([
+    [0, 'warming-up'],
+    [59.999, 'warming-up'],
+    [60, 'healthy'],
+    [3599.999, 'healthy'],
+    [3600, 'steady'],
+    [3601, 'steady']
+  ])('labels uptime %s as %s at category boundaries', (uptime, expected) => {
+    expect(formatStatus(uptime)).toBe(expected)
+  })
+
+  it.each([null, undefined, true, {}, []])('rejects invalid uptime %j', value => {
+    expect(() => formatStatus(value)).toThrow('invalid uptime')
+  })
   it('throws on negative', () => {
     expect(() => formatStatus(-1)).toThrow('invalid uptime')
   })
