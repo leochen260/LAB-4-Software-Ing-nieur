@@ -39,6 +39,7 @@ describe('system metrics', () => {
 
 describe('hospital metrics', () => {
   it('counts the same records as the API lists after accepted and rejected writes', async () => {
+    vi.spyOn(os, 'uptime').mockReturnValue(7200)
     const records = {
       doctors: { name: 'Dr. Lee', specialty: 'Cardiology' },
       patients: { name: 'Alex', age: 30 },
