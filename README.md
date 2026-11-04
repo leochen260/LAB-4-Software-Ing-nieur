@@ -31,6 +31,8 @@ Open `coverage/index.html` for a visual coverage report (locally).
 - `GET /version` – returns `{ version }` from `package.json`
 - `GET /info` – returns `{ name, version, node, uptime }`
 - `GET /boom` – triggers an error to test the global error handler
+- `GET /api/patients` – list all patients
+- `POST /api/patients` – add a patient `{ name, age }` (400 if a field is missing or invalid)
 
 Routes are **auto-mounted** from `src/routes/auto/*.route.js` so each student can add a file without touching `src/app.js` (fewer merge conflicts).
 
