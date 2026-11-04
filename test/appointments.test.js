@@ -1,6 +1,10 @@
 import { describe, it, expect } from 'vitest'
+import express from 'express'
 import request from 'supertest'
-import app from '../src/app.js'
+import router from '../src/routes/auto/appointments.route.js'
+
+const app = express()
+app.use(router)
 
 describe('Appointments API', () => {
   it('GET /api/appointments should return an array', async () => {
@@ -15,6 +19,7 @@ describe('Appointments API', () => {
       .send({ doctor: 'Dr. Lee', patient: 'Alice', date: '2026-11-20' })
     expect(res.status).toBe(201)
     expect(res.body).toHaveProperty('id')
+    expect(res.body.doctor).toBe('Dr. Lee')
   })
 
   it('POST /api/appointments should return 400 if a field is missing', async () => {
