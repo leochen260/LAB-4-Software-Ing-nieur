@@ -18,6 +18,9 @@ const require = createRequire(import.meta.url)
 
 const app = express()
 
+// Parse JSON request bodies before handling routes
+app.use(express.json())
+
 // Simple root + health endpoints
 app.get('/', (_req, res) => res.json({ ok: true, message: 'Hello from CI/CD demo 👋' }))
 app.get('/health', (_req, res) => res.status(200).send('OK'))
