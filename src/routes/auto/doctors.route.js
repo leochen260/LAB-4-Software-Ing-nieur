@@ -4,13 +4,9 @@
  * Data is kept in memory, so it resets when the server restarts.
  */
 import { Router } from 'express'
+import { doctors } from '../../data/hospital.js'
 
 const router = Router()
-
-const doctors = [
-  { id: 1, name: 'Dr. Sarah Lee', specialty: 'Cardiology' },
-  { id: 2, name: 'Dr. Amir Khan', specialty: 'Pediatrics' }
-]
 
 router.get('/api/doctors', (_req, res) => {
   res.status(200).json(doctors)
