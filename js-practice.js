@@ -1,47 +1,51 @@
-// Lab 5 - Partie 2 : exercices JavaScript
-// Lancer avec : node js-practice.js
-// L'exercice 2.5 se trouve dans hospitalData.js et main.js
+// Lab 5 – JavaScript practice (run with: node js-practice.js)
 
-// ----- 2.1 Variables et types de donnees -----
-console.log('--- 2.1 ---')
+// ---------------------------------------------------------------
+// 2.1 Variables and Data Types
+// ---------------------------------------------------------------
+console.log('\n=== 2.1 Variables and Data Types ===')
 
 const hospitalName = 'Central Hospital'
 const numberOfDoctors = 12
 let isOpen = true
 
-function showHospitalStatus () {
+function logHospitalStatus () {
   if (isOpen) {
     console.log(`Welcome to ${hospitalName}! We have ${numberOfDoctors} doctors currently available.`)
   } else {
-    console.log(`${hospitalName} is currently closed. Please come back later.`)
+    console.log(`Sorry, ${hospitalName} is currently closed. Please come back later.`)
   }
 }
 
-showHospitalStatus()
+logHospitalStatus()
 isOpen = false
-showHospitalStatus()
+logHospitalStatus()
 
-// ----- 2.2 Tableaux et boucles -----
-console.log('\n--- 2.2 ---')
+// ---------------------------------------------------------------
+// 2.2 Working with Arrays and Loops
+// ---------------------------------------------------------------
+console.log('\n=== 2.2 Arrays and Loops ===')
 
-const doctors = ['Dr. Lee', 'Dr. Khan', 'Dr. Martin', 'Dr. Dubois', 'Dr. Garcia']
+const doctors = ['Dr. Lee', 'Dr. Khan', 'Dr. Martin', 'Dr. Dubois', 'Dr. Rossi']
 
 for (const [index, doctor] of doctors.entries()) {
   console.log(`Doctor #${index + 1}: ${doctor}`)
 }
 
-doctors.push('Dr. Chen')
-console.log(`Number of doctors: ${doctors.length}`)
+doctors.push('Dr. Nguyen')
+console.log(`Updated number of doctors: ${doctors.length}`)
 
 function findDoctor (name) {
   return doctors.includes(name) ? 'Doctor found' : 'Doctor not found'
 }
 
-console.log(findDoctor('Dr. Lee'))
-console.log(findDoctor('Dr. House'))
+console.log('findDoctor("Dr. Khan") →', findDoctor('Dr. Khan'))
+console.log('findDoctor("Dr. House") →', findDoctor('Dr. House'))
 
-// ----- 2.3 Objets et donnees imbriquees -----
-console.log('\n--- 2.3 ---')
+// ---------------------------------------------------------------
+// 2.3 Objects and Nested Data
+// ---------------------------------------------------------------
+console.log('\n=== 2.3 Objects and Nested Data ===')
 
 const patient = {
   name: 'Alice Martin',
@@ -50,15 +54,17 @@ const patient = {
   doctor: { name: 'Dr. Lee', specialty: 'Cardiology' }
 }
 
-console.log(`Doctor name: ${patient.doctor.name}`)
-console.log(`Number of conditions: ${patient.conditions.length}`)
+console.log("Patient's doctor:", patient.doctor.name)
+console.log('Number of conditions:', patient.conditions.length)
 console.log(`${patient.name} is treated by ${patient.doctor.name} (${patient.doctor.specialty}).`)
 
 patient.conditions.push('anxiety')
-console.log(patient)
+console.log('Updated patient:', patient)
 
-// ----- 2.4 Fonctions et filtrage de tableaux -----
-console.log('\n--- 2.4 ---')
+// ---------------------------------------------------------------
+// 2.4 Functions and Array Filtering
+// ---------------------------------------------------------------
+console.log('\n=== 2.4 Functions and Array Filtering ===')
 
 const patients = [
   { id: 1, name: 'Alice', age: 34 },
@@ -66,9 +72,7 @@ const patients = [
   { id: 3, name: 'Marie', age: 29 }
 ]
 
-function filterByAge (minAge) {
-  return patients.filter((p) => p.age > minAge)
-}
+const filterByAge = (minAge) => patients.filter((p) => p.age > minAge)
 
 function addPatient (name, age) {
   const newPatient = { id: patients.length + 1, name, age }
@@ -77,11 +81,13 @@ function addPatient (name, age) {
 }
 
 console.log('Patients older than 30:', filterByAge(30))
-addPatient('Paul', 52)
-console.log('Updated list:', patients)
+addPatient('Enzo', 22)
+console.log('Updated patient list:', patients)
 
-// ----- 2.6 Gestion des erreurs et validation -----
-console.log('\n--- 2.6 ---')
+// ---------------------------------------------------------------
+// 2.6 Error Handling and Validation
+// ---------------------------------------------------------------
+console.log('\n=== 2.6 Error Handling and Validation ===')
 
 function createAppointment (doctor, patient, date) {
   if (!doctor || !patient || !date) {
@@ -92,23 +98,24 @@ function createAppointment (doctor, patient, date) {
 
 try {
   console.log(createAppointment('Dr. Lee', 'Alice', '2025-03-15'))
-  console.log(createAppointment('Dr. Lee')) // doit declencher l'erreur
+  console.log(createAppointment('Dr. Lee')) // should trigger an error
 } catch (err) {
   console.error('Error:', err.message)
 }
 
-// ----- 2.7 Code asynchrone -----
-console.log('\n--- 2.7 ---')
-
+// ---------------------------------------------------------------
+// 2.7 Asynchronous Code
+// ---------------------------------------------------------------
 function getHospitalData () {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve({ name: 'Central Hospital', uptime: 1234 })
+      resolve({ name: hospitalName, uptime: 1234 })
     }, 1000)
   })
 }
 
 async function showData () {
+  console.log('\n=== 2.7 Asynchronous Code ===')
   console.log('Fetching hospital data...')
   const data = await getHospitalData()
   console.log('Data loaded:', data)

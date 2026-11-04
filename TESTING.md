@@ -22,6 +22,7 @@ Open `coverage/index.html` for the per-file HTML report. `coverage/coverage-summ
 | Version (DEVOPS-1) | `test/version.test.js`, `test/version.route.test.js` | HTTP 200, JSON content type, non-empty version matching package metadata |
 | Info (DEVOPS-2) | `test/info.test.js`, `test/info.route.test.js`, `test/unit/appInfo.test.js` | HTTP 200, name/version/node/uptime, non-negative uptime and helper behaviour |
 | Errors (DEVOPS-3) | `test/boom.test.js`, `test/boom.route.test.js`, `test/unit/errorHandler.test.js`, `test/app.test.js` | HTTP 500, JSON error payload, custom status/message and defaults for missing errors |
+| Patients | `test/patients.test.js`, `test/patients.route.test.js` | GET returns 200 and an array; POST returns 201 with an id; missing/invalid name or age returns 400 |
 | Status (DEVOPS-4) | `test/unit/status.test.js` | Warming-up below 60s, healthy from 60s to below 3600s, steady from 3600s; invalid inputs rejected |
 | Base HTTP routes | `test/health.test.js`, `test/app.test.js` | Health returns 200 and OK; root returns JSON; unknown routes return 404 |
 | Server entrypoint | `test/unit/index.test.js` | Default port 3000, configured PORT and readiness logging; listener mocked to avoid persistent sockets |
