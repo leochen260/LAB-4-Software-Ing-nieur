@@ -19,6 +19,7 @@ describe('Categories API', () => {
     expect(res.status).toBe(200)
     expect(res.body).toHaveProperty('id', 1)
     expect(res.body).toHaveProperty('name')
+    expect(res.body).toHaveProperty('usage', 'desktop')
   })
 
   it('GET /api/categories/:id should return 404 for an unknown id', async () => {
@@ -28,10 +29,10 @@ describe('Categories API', () => {
   })
 
   it('supports the full create, update and delete flow', async () => {
-    const created = await request(app).post('/api/categories').send({ name: 'Server ECC (app)' })
+    const created = await request(app).post('/api/categories').send({ name: 'Server ECC (app)', usage: 'desktop' })
     expect(created.status).toBe(201)
     expect(created.body).toHaveProperty('id')
-    expect(created.body).toMatchObject({ name: 'Server ECC (app)', description: '', is_active: true })
+    expect(created.body).toMatchObject({ name: 'Server ECC (app)', usage: 'desktop', description: '', is_active: true })
 
     const id = created.body.id
 
@@ -47,7 +48,22 @@ describe('Categories API', () => {
   })
 
   it('POST /api/categories should reject a missing name', async () => {
-    const res = await request(app).post('/api/categories').send({ description: 'No name' })
+    const res = await request(app).post('/api/categories').send({ usage: 'gaming', description: 'No name' })
     expect(res.status).toBe(400)
+  })
+
+  it('returns 400, 404 and 409 errors through the app', async () => {
+    expect((await request(app).post('/api/categories').send({ name: '   ', usage: 'gaming' })).status).toBe(400)
+    expect((await request(app).post('/api/categories').send({ name: 'Gaming', usage: 'gaming' })).status).toBe(409)
+    expect((await request(app).put('/api/categories/9999').send({ name: 'X' })).status).toBe(404)
+    expect((await request(app).put('/api/categories/1').send({ usage: 'server' })).status).toBe(400)
+    expect((await request(app).put('/api/categories/1').send({ name: 'Portable' })).status).toBe(409)
+    expect((await request(app).delete('/api/categories/9999')).status).toBe(404)
+  })
+
+  it('POST /api/categories should reject an unknown usage', async () => {
+    const res = await request(app).post('/api/categories').send({ name: 'Server', usage: 'server' })
+    expect(res.status).toBe(400)
+    expect(res.body.error).toMatch(/usage/)
   })
 })

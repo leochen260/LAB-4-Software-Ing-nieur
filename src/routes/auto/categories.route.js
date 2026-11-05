@@ -1,5 +1,6 @@
 /**
  * CRUD for /api/categories (RAM module categories on PeopleRam).
+ * Matches the Categorie entity of the SRS (id, nom, usage) and FR-07 / FR-09.
  *
  * GET    /api/categories      → list of active categories
  * GET    /api/categories/:id  → one active category
@@ -7,6 +8,7 @@
  * PUT    /api/categories/:id  → updates a category
  * DELETE /api/categories/:id  → soft delete (is_active = false)
  *
+ * usage is one of USAGES: desktop (PC fixe), laptop (portable) or gaming.
  * Category ids match the category_id used by /api/products.
  * Data is kept in memory, so it resets when the server restarts.
  */
@@ -14,10 +16,12 @@ import { Router } from 'express'
 
 const router = Router()
 
+export const USAGES = ['desktop', 'laptop', 'gaming']
+
 const categories = [
-  { id: 1, name: 'DDR4 Desktop', description: 'DDR4 DIMM modules for desktop PCs', is_active: true },
-  { id: 2, name: 'DDR5 Desktop', description: 'DDR5 DIMM modules for desktop PCs', is_active: true },
-  { id: 3, name: 'Laptop SO-DIMM', description: 'SO-DIMM modules for laptops', is_active: true }
+  { id: 1, name: 'PC fixe', usage: 'desktop', description: 'DIMM modules for desktop PCs', is_active: true },
+  { id: 2, name: 'Gaming', usage: 'gaming', description: 'High-frequency DIMM kits for gaming PCs', is_active: true },
+  { id: 3, name: 'Portable', usage: 'laptop', description: 'SO-DIMM modules for laptops', is_active: true }
 ]
 
 /**
@@ -26,6 +30,9 @@ const categories = [
 export function validateCategory (category) {
   if (typeof category.name !== 'string' || category.name.trim() === '') {
     return 'name is required and must be a non-empty string'
+  }
+  if (!USAGES.includes(category.usage)) {
+    return `usage is required and must be one of: ${USAGES.join(', ')}`
   }
   if (category.description !== undefined && typeof category.description !== 'string') {
     return 'description must be a string'
@@ -67,6 +74,7 @@ router.post('/api/categories', (req, res) => {
   const newCategory = {
     id: Math.max(0, ...categories.map(c => c.id)) + 1,
     name: body.name.trim(),
+    usage: body.usage,
     description: body.description ?? '',
     is_active: true
   }
