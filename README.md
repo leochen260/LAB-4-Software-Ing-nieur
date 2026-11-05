@@ -44,7 +44,7 @@ Open `coverage/index.html` for a visual coverage report (locally).
 | POST | `/api/patients` | Add a patient `{ name, age }` (201, 400 if a field is missing or invalid) |
 | GET | `/api/appointments` | List appointments (200) |
 | POST | `/api/appointments` | Add an appointment `{ doctor, patient, date }` (201, 400 if a field is missing) |
-| GET | `/api/metrics` | System uptime, memory usage and status (200) |
+| GET | `/api/metrics` | System uptime, memory usage, status and hospital totals `{ doctors, patients, appointments }` (200) |
 
 ### PeopleRam CRUD (Lab 6)
 
