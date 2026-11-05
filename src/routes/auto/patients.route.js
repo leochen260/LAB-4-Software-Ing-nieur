@@ -6,14 +6,9 @@
  */
 import express, { Router } from 'express'
 import { validatePatient } from '../../utils/patientValidation.js'
+import { patients } from '../../data/hospital.js'
 
 const router = Router()
-
-const patients = [
-  { id: 1, name: 'Alice Martin', age: 34 },
-  { id: 2, name: 'John Smith', age: 45 },
-  { id: 3, name: 'Marie Dupont', age: 29 }
-]
 
 router.get('/api/patients', (_req, res) => {
   res.status(200).json(patients)

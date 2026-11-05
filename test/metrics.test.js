@@ -10,7 +10,7 @@ describe('system metrics', () => {
   it('reports host uptime in seconds and process RSS in bytes', () => {
     vi.spyOn(os, 'uptime').mockReturnValue(120)
     vi.spyOn(process.memoryUsage, 'rss').mockReturnValue(1048576)
-    expect(getMetrics()).toEqual({ uptime: 120, memory: 1048576, status: 'healthy' })
+    expect(getMetrics()).toMatchObject({ uptime: 120, memory: 1048576, status: 'healthy' })
   })
 
   it.each([[5, 'warming-up'], [120, 'healthy'], [7200, 'steady']])('serves metrics for uptime %i', async (uptime, status) => {
@@ -33,6 +33,31 @@ describe('system metrics', () => {
     for (const status of ['warming-up', 'healthy']) {
       const res = await request(isolatedApp).get('/api/metrics').expect(200)
       expect(res.body.status).toBe(status)
+    }
+  })
+})
+
+describe('hospital metrics', () => {
+  it('counts the same records as the API lists after accepted and rejected writes', async () => {
+    vi.spyOn(os, 'uptime').mockReturnValue(7200)
+    const records = {
+      doctors: { name: 'Dr. Lee', specialty: 'Cardiology' },
+      patients: { name: 'Alex', age: 30 },
+      appointments: { doctor: 'Dr. Lee', patient: 'Alex', date: '2026-12-01' }
+    }
+    const totals = {}
+    for (const name of Object.keys(records)) {
+      const list = await request(app).get('/api/' + name).expect(200)
+      totals[name] = list.body.length
+    }
+    const metrics = () => request(app).get('/api/metrics').expect(200)
+    expect((await metrics()).body.hospital).toEqual(totals)
+    for (const [name, body] of Object.entries(records)) {
+      await request(app).post('/api/' + name).send({}).expect(400)
+      expect((await metrics()).body.hospital).toEqual(totals)
+      await request(app).post('/api/' + name).send(body).expect(201)
+      totals[name]++
+      expect((await metrics()).body.hospital).toEqual(totals)
     }
   })
 })

@@ -8,6 +8,166 @@
   ],
   "item": [
     {
+      "name": "GET /api/doctors",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "  pm.response.to.have.status(200)",
+              "})",
+              "pm.test('Response is an array', function () {",
+              "  pm.expect(pm.response.json()).to.be.an('array')",
+              "})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/doctors",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "doctors"
+          ]
+        }
+      }
+    },
+    {
+      "name": "POST /api/doctors",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 201', function () {",
+              "  pm.response.to.have.status(201)",
+              "})",
+              "pm.test('Doctor has an id', function () {",
+              "  pm.expect(pm.response.json()).to.have.property('id')",
+              "})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Dr. Julie\",\n  \"specialty\": \"Neurology\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/doctors",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "doctors"
+          ]
+        }
+      }
+    },
+    {
+      "name": "GET /api/patients",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "  pm.response.to.have.status(200)",
+              "})",
+              "pm.test('Response is an array', function () {",
+              "  pm.expect(pm.response.json()).to.be.an('array')",
+              "})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/patients",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "patients"
+          ]
+        }
+      }
+    },
+    {
+      "name": "POST /api/patients",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 201', function () {",
+              "  pm.response.to.have.status(201)",
+              "})",
+              "pm.test('Patient has an id', function () {",
+              "  pm.expect(pm.response.json()).to.have.property('id')",
+              "})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Alex\",\n  \"age\": 30\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/patients",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "patients"
+          ]
+        }
+      }
+    },
+    {
       "name": "GET /api/appointments",
       "event": [
         {
@@ -98,6 +258,46 @@
           "raw": "{{baseUrl}}/api/appointments",
           "host": ["{{baseUrl}}"],
           "path": ["api", "appointments"]
+        }
+      }
+    },
+    {
+      "name": "GET /api/metrics",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "  pm.response.to.have.status(200)",
+              "})",
+              "pm.test('System metrics and hospital counts are present', function () {",
+              "  const data = pm.response.json()",
+              "  pm.expect(data.uptime).to.be.at.least(0)",
+              "  pm.expect(data.memory).to.be.above(0)",
+              "  pm.expect(data.status).to.be.oneOf(['warming-up', 'healthy', 'steady'])",
+              "  for (const name of ['doctors', 'patients', 'appointments']) {",
+              "    pm.expect(Number.isInteger(data.hospital[name])).to.equal(true)",
+              "    pm.expect(data.hospital[name]).to.be.at.least(0)",
+              "  }",
+              "})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/metrics",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "metrics"
+          ]
         }
       }
     }
