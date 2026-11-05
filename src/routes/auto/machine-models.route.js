@@ -14,11 +14,8 @@ let machineModels = [
 let nextId = 3
 
 function pickFields (body) {
-  const data = {}
-  for (const field of FIELDS) {
-    if (body[field] !== undefined) data[field] = body[field]
-  }
-  return data
+  const entries = FIELDS.filter(field => body[field] !== undefined).map(field => [field, body[field]])
+  return Object.fromEntries(entries)
 }
 
 function validate (data) {
