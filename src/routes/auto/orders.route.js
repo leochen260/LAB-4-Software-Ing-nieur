@@ -1,7 +1,7 @@
 import { Router } from 'express'
 
 const router = Router()
-let orders = [
+const orders = [
   { id: 1, status: 'pending', deliveryMethod: 'standard', items: [{ productId: 1, quantity: 2 }], total: 120 }
 ]
 let nextId = 2
